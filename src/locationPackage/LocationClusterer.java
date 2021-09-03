@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class LocationClusterer
 {
-    String filePath = "sampleLocations.txt";
+    String filePath = "sampleLocations1.txt";
 
     File file = new File(filePath);
 
@@ -22,7 +22,9 @@ public class LocationClusterer
 
     Coordinate [] centroids;
 
-    ArrayList<Coordinate> [] clusters;
+    ArrayList<Coordinate> [] clusterValues;
+
+    ArrayList<Cluster> clusters;
 
     double eps = 0.1;
 
@@ -81,11 +83,12 @@ public class LocationClusterer
                         Math.pow(c1.getLongitude() - c2.getLongitude(),2));
     }
 
-    public void cluster(int k)
+    public ArrayList<Cluster> cluster(int k)
     {
         distances = new double[k];
         centroids = new Coordinate[k];
-        clusters = new ArrayList[k];
+        clusterValues = new ArrayList[k];
+        clusters = new ArrayList<>();
 
         Random random = new Random();
 
@@ -101,7 +104,7 @@ public class LocationClusterer
         {
             for(int i=0;i<k;i++)
             {
-                clusters[i] = new ArrayList<>();
+                clusterValues[i] = new ArrayList<>();
             }
 
 
@@ -115,7 +118,7 @@ public class LocationClusterer
 
                 int index = min(distances);
 
-                clusters[index].add(coordinate);
+                clusterValues[index].add(coordinate);
             }
 
             Coordinate prevCentroid = centroids[0];
@@ -125,13 +128,13 @@ public class LocationClusterer
                 double latitudeSum = 0;
                 double longitudeSum = 0;
 
-                for(Coordinate coordinate: clusters[i])
+                for(Coordinate coordinate: clusterValues[i])
                 {
                     latitudeSum += coordinate.getLatitude();
                     longitudeSum += coordinate.getLongitude();
                 }
 
-                centroids[i] = new Coordinate(latitudeSum/clusters[i].size(), longitudeSum/clusters[i].size());
+                centroids[i] = new Coordinate(latitudeSum/ clusterValues[i].size(), longitudeSum/ clusterValues[i].size());
             }
 
             if(distance(prevCentroid, centroids[0]) < eps)
@@ -141,15 +144,24 @@ public class LocationClusterer
 
 
         }while (true);
+
+        for(int i=0;i<centroids.length;i++)
+        {
+            Cluster cluster = new Cluster(clusterValues[i], centroids[i]);
+
+            clusters.add(cluster);
+        }
+
+        return clusters;
     }
 
     public void printClusters()
     {
-        for(int i=0; i<clusters.length ;i++)
+        for(int i = 0; i< clusterValues.length ; i++)
         {
             System.out.println("Cluster " + (i+1) + ":");
 
-            for(Coordinate coordinate: clusters[i])
+            for(Coordinate coordinate: clusterValues[i])
             {
                 System.out.println(coordinate.getLatitude() + " " + coordinate.getLongitude());
             }

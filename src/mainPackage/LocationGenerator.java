@@ -10,11 +10,11 @@ public class LocationGenerator
 
         Random random = new Random();
 
-        int sampleSize = 10;
+        int sampleSize = 100;
 
         try
         {
-            FileWriter fileWriter = new FileWriter("sampleLocations.txt");
+            FileWriter fileWriter = new FileWriter("sampleLocations1.txt");
 
             for(int i=0;i<sampleSize;i++)
             {
