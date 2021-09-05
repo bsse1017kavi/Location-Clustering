@@ -19,7 +19,7 @@ public class GraphPlot extends Application
         stage.setTitle("K means Plotting");
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
-        final ScatterChart<Number,Number> bc =
+        final ScatterChart<Number,Number> plot =
                 new ScatterChart<Number,Number>(xAxis,yAxis);
 
 
@@ -34,6 +34,8 @@ public class GraphPlot extends Application
 
         scanner.close();
 
+        locationClusterer.printClusters();
+
         int i = 0;
 
         for(Cluster cluster: clusters)
@@ -47,14 +49,14 @@ public class GraphPlot extends Application
                 series.getData().add(new XYChart.Data(coordinate.getLatitude(),coordinate.getLongitude()));
             }
 
-            bc.getData().add(series);
+            plot.getData().add(series);
 
             i++;
         }
 
         //bc.getData().add(series1);
 
-        Scene scene  = new Scene(bc,800,600);
+        Scene scene  = new Scene(plot,800,600);
 
         Stage stage1 = new Stage();
         Scene scene1 = BarGraph.centroidBargraph(clusters);
@@ -63,8 +65,12 @@ public class GraphPlot extends Application
 
         stage.setScene(scene);
 
+        stage1.setX(50);
+        stage1.setY(200);
         stage1.show();
 
+        stage.setX(1000);
+        stage.setY(200);
         stage.show();
     }
 

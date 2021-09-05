@@ -26,7 +26,7 @@ public class LocationClusterer
 
     ArrayList<Cluster> clusters;
 
-    double eps = 0.1;
+    double eps = 1e-9;
 
     public void initialize()
     {
